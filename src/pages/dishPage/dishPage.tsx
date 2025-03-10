@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DishForm } from "../../components/dishForm/dishForm";
+import { DishForm } from "../../components/dishForm/dishFrom";
 import { IDishShort } from "../../types";
 import axiosApi from "../../axiosApi";
 import { useNavigate } from "react-router-dom";

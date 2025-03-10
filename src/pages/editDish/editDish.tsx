@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axiosApi from "../../axiosApi";
 import { IDish } from "../../types";
-import { DishForm } from "../../components/dishForm/dishForm";
+import { DishForm } from "../../components/dishForm/dishFrom";
 import { CircularProgress } from "@mui/material";
 
 const EditDish = () => {
