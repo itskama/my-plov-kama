@@ -1,54 +1,82 @@
-import { Box, Button, Typography, Card, CardContent, IconButton } from "@mui/material";
-import { useCart } from "../../hooks/useCart";
-import { useNavigate } from "react-router-dom";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { 
+    Box, 
+    Container, 
+    Typography, 
+    List, 
+    ListItem, 
+    ListItemText, 
+    Divider, 
+    Link 
+} from '@mui/material';
+import { IBasketState } from '../../types';
+import { Link as RouterLink } from 'react-router';
 
-const BasketPage = () => {
-    const { cart, updateQuantity, removeFromCart, clearCart } = useCart();
-    const navigate = useNavigate();
+interface Props {
+    basketState: IBasketState;
+}
 
-    const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+const Basket = ({ basketState }: Props) => {
+    const { items, totalPrice, totalCount } = basketState;
+
+    if (items.length === 0) {
+        return (
+            <Container>
+                <Typography variant="h5" align="center" sx={{ mt: 4 }}>
+                    Basket is empty
+                </Typography>
+                <Typography variant="h5" align="center" sx={{ mt: 4 }}>
+                    <Link to="/" component={RouterLink}>
+                        Go to home page
+                    </Link>
+                </Typography>
+            </Container>
+        );
+    }
 
     return (
-        <Box sx={{ maxWidth: 800, margin: "auto", padding: 3 }}>
-            <Typography variant="h4" gutterBottom>Корзина</Typography>
-            {cart.length === 0 ? (
-                <Typography>Корзина пуста</Typography>
-            ) : (
-                cart.map(item => (
-                    <Card key={item.id} sx={{ marginBottom: 2 }}>
-                        <CardContent>
-                            <Typography variant="h6">{item.name}</Typography>
-                            <Typography>Цена: {item.price} сом</Typography>
-                            <Typography>Количество: {item.quantity}</Typography>
-                            <Box>
-                                <IconButton onClick={() => updateQuantity(item.id, item.quantity + 1)}>
-                                    <AddIcon />
-                                </IconButton>
-                                <IconButton onClick={() => updateQuantity(item.id, Math.max(item.quantity - 1, 1))}>
-                                    <RemoveIcon />
-                                </IconButton>
-                                <IconButton onClick={() => removeFromCart(item.id)}>
-                                    <DeleteIcon color="error" />
-                                </IconButton>
-                            </Box>
-                        </CardContent>
-                    </Card>
-                ))
-            )}
-            <Typography variant="h5">Итого: {totalPrice} сом</Typography>
-            {cart.length > 0 && (
-                <>
-                    <Button variant="contained" color="error" onClick={clearCart} sx={{ marginRight: 2 }}>
-                        Очистить корзину
-                    </Button>
-                    <Button variant="contained" color="primary" onClick={() => navigate("/checkout")}>Оформить заказ</Button>
-                </>
-            )}
-        </Box>
+        <Container maxWidth="md">
+            <Box sx={{ mt: 4 }}>
+                <Typography variant="h4" gutterBottom>
+                    Basket
+                </Typography>
+                <List>
+                    {items.map((item) => (
+                        <Box key={item.dish.id}>
+                            <ListItem>
+                                <ListItemText
+                                    primary={item.dish.name}
+                                    secondary={
+                                        <>
+                                            <Typography component="span" variant="body2">
+                                                {item.dish.description}
+                                            </Typography>
+                                            <br />
+                                            <Typography component="span" variant="body2">
+                                                Price: {item.dish.price} som
+                                            </Typography>
+                                            <br />
+                                            <Typography component="span" variant="body2">
+                                                Count: {item.count}
+                                            </Typography>
+                                        </>
+                                    }
+                                />
+                            </ListItem>
+                            <Divider />
+                        </Box>
+                    ))}
+                </List>
+                <Box sx={{ mt: 4, textAlign: 'right' }}>
+                    <Typography variant="h6">
+                        Total items: {totalCount}
+                    </Typography>
+                    <Typography variant="h5" sx={{ mt: 2 }}>
+                        Total price: {totalPrice} som
+                    </Typography>
+                </Box>
+            </Box>
+        </Container>
     );
 };
 
-export default BasketPage;
+export default Basket;
