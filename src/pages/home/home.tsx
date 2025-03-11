@@ -46,13 +46,6 @@ const Home: React.FC = () => {
     return (
         <div>
             <h1>Главная страница</h1>
-
-            <div style={{ textAlign: "center", marginBottom: "20px" }}>
-                <Button variant="contained" color="primary" onClick={() => navigate("/add-dish")}>
-                    ➕ Добавить блюдо
-                </Button>
-            </div>
-
             {loading && <CircularProgress />}
             {!loading && dishes.length === 0 && <p style={{ textAlign: "center" }}>⚠ Нет блюд в базе</p>}
 
